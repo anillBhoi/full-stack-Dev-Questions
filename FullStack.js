@@ -238,6 +238,14 @@
 
 
 
+
+// Q.15 How can you prevent a bot from scrapping your publicly accessible API ?        
+           // ->1. Limiting the number of requests a user can make to an API within a certain period of time.
+           // 2.CAPTCHA stands for "Completely Automated Public Turing test to tell Computers and Humans Apart." it Verifies whether you're a real person or a bot.
+           //3. A Honeypot is like a trap for bots. It's hidden element that real users never see or interact with, but bots will.
+           //4. Obfuscation means making your API endpoints(the web address your API uses) less obvious or harder to find.
+           // 5. Spotting anything that looks unusual or suspicious, like a sudden spike in request.
+
              
 
 
