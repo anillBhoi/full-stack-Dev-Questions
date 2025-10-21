@@ -637,3 +637,305 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+         // #################################### Express.Js ########################################
+
+
+// Q.1 How do you handle routing in Express.js ?
+      // -> In Express.js, routing is handled using the Router class, which allows you to define routes for your application.    
+
+      //ex- 
+      const express = require('express')
+      const aboutRouter = express.Router();
+    
+      const port2 = 3000
+
+      aboutRouter.get('/achivement', (req, res) => res.send('Hello World !'))
+            aboutRouter.get('/header', (req, res) => res.send('Hello World !'))
+                  aboutRouter.get('/footer', (req, res) => res.send('Hello World !'))
+      aboutRouter.listen(port2, () => console.log(`Example app listening on port ${port}!`))
+     module.exports = aboutRouter;
+
+
+
+
+
+// Q.2 What are the differences between req.params, req.query, and req.body ?
+     //-> In Express.js, req.params, req.query, and req.body are used to access data sent in an HTTP request
+
+      // ex - req.params
+
+      app.get('/users/:userId', (req, res) => {
+        const userId = req.params.userId;  // access userId from the url
+        res.send(`User ID is ${userId}`);
+      });
+
+
+      // req.query
+
+      app.get('/users', (req, res) => {
+        const sort = req.query.sort; // access sort parameter from the query string
+
+        const age = req.query.age;
+        res.send(`Sort order : ${sort}, Age: ${age}`);
+      });
+
+
+      // req.query 
+  
+         app.get('/users', (req,res) => {
+          const newUser = req.body;  // Access data sent in the request body
+
+          res.send(`New user created: ${JSON.stringgify(newUser)}`)
+         });  
+
+
+
+
+// Q.3 What are middleware functions in Express, and how do they work ?
+
+      // -> Midddleware functions in Express are functions that have access to the request object (req), the response object (res),
+           // and the next middleware function in the application's request-response cycle.
+
+           // Types of middleware ->
+                 // 1.Application-Level Middleware - the middlware that can access everything inside the code 
+                          // ex - 
+                                const express = require('express')
+                                const app3 = express()
+                                const port3 = 3001
+                                
+                                app3.get('/', (req, res) => res.send('hello wordl !'))
+
+                                app3.use((req, res, next) => {
+                                  console.log("Received")
+                                  next();
+                                })
+
+                                app3.listen(port3, () => console.log(`Example app listing on port ${port}`));
+
+
+                 // 2.Router-Level Middleware -  which is only specify to the specific router level.
+
+                           //ex - 
+                           const express = require('express')
+                           const aboutRouter1 = express.Router();
+    
+                           const port4 = 3003
+
+                              aboutRouter1.get('/achivement', (req, res) => res.send('Hello World !'))
+
+                               aboutRouter1.use((req, res, next ) => {
+                                    console.log("received");
+                                    next();
+                               })
+
+                              aboutRouter1.get('/header', (req, res) => res.send('Hello World !'))
+
+                              aboutRouter1.get('/footer', (req, res) => res.send('Hello World !'))
+
+                              aboutRouter1.listen(port2, () => console.log(`Example app listening on port ${port4}!`))
+                             module.exports = aboutRouter1;
+
+                 // 3. Error-Handling -  which is for handling the errors.
+
+
+                               const express = require('express')
+                           const aboutRouter2 = express.Router();
+    
+                           const port5 = 3003
+
+                              aboutRouter2.get('/achivement', (req, res) => res.send('Hello World !'))
+
+                               aboutRouter2.use((err, req, res, next ) => {
+                                    console.log("received");
+                                    console.error(err);
+                                    next();
+                               })
+
+                              aboutRouter2.listen(port2, () => console.log(`Example app listening on port ${port5}!`))
+                             module.exports = aboutRouter2;
+
+
+
+            
+                             
+ // Q.4  How can you hanlde errors in an Express application ?
+     // -> 1.Error-handling middleware
+        // 2. 404 handling
+        // 3. Custom error types                          
+
+
+
+// Q.5 What is the role of body parsers in Express, and how do you use them ?
+     // ->  Body parsers make it easier to work with data sent from a client to a server. for example, if a client sends JSON data in a post request, 
+           // The body parser will convert that JSON string into a javaScript object, so you can access the values directly. 
+
+
+                           const express = require('express')
+                           const app5 = express.Router();
+                           const bodyParse = require('body-parser');
+                           app5.use(bodyParser.urlencoded({extended:true}));
+
+                              app5.get('/achivement', (req, res) => res.send('Hello World !'))
+
+                              app5.post('/form', (req, res) => {
+                                console.log(req.body);
+                                res.send("Message received");
+                              })
+
+                     
+                              app5.listen(port2, () => console.log(`Example app listening on port ${port5}!`))
+                             module.exports = app5;
+
+
+
+// Q.6 How do you implement authenitcation and authorization in Express ?
+       // ->  Authentication -  is the process of verifying the identity of a user
+       //     Authorization - determines what actions the authenticated user is allowed to perform    
+       
+       
+       // ex - 
+          const express = require('express')
+          const app6 = express()
+          const port6 = 3006
+          const jwt = require('jsonwebtoken');
+          const bodyparser1 = require('body-parser');
+
+          app6.use(express.json());
+          app6.use(bodyParser.urlencoded({extended : true}));
+
+          const SECRET_KEY = 'secret_keyafad';
+
+          const user= {
+            id : 1, 
+            username : 'anil',
+            password : 'pass123'
+          };
+
+          app6.post('/login', (req, res) => {
+            const {username, password} = req.body;
+            if(username === user.username && password === user.password) {
+                const token = jwt.sign({userId:user.id}, SECRET_KEY, {expiresIn :'1h'});
+                return res.json(token);
+            } else{
+              return res.status(401).send("Wrong credentials");
+            }
+          })
+
+          const authorizationToken = (req,res, next) => {
+                const token = req.headers['authorization'];
+                if(!token) return res.status(403).send("token is required");
+
+                jwt.verify(token, SECRET_KEY, (err, decoded) => {
+                      if(err) return res.status(403).send("Invalid Token");
+                      req.user = decoded;
+                      next();
+                })
+          }
+
+          app.get('/',authorizationToken,  (req, res) => res.send('Hello world'))
+          app.listen(port, () => console.log(`Example app listening on port ${port6}`))
+
+
+
+
+ 
+// Q.6 What is CORS, and how do you handle it in an Express application ?
+      // -> CORS (Cross - Origin Resources Sharing) is like a special permission slip
+      // Cross-Origin Resources Sharing(CORS) is a security mechanism implemented by web browser that allows serves to specify who can access their resources over the web. 
+         // CORS works by using HTTP headers to define which origin(domains) are permitted to make requests to the server.        
+
+
+
+// Q.7 How do you manage sessions in Express ?
+   // -> In Express, session management is commonly handled using middleware like express-session.
+   // This middleware helps store session data on the server, ensuring that each user has their own session with a unique identifier. 
+   
+      // ex - 
+
+                const express = require('express')
+                const app7= express()
+                const port7 = 3006
+                const session = require('express-session');
+
+                app7.use(session({
+                  secret : 'Your_secrete_key',
+                  resave: false,
+                  saveUnitialized : true,
+                  cookie : {maxAge: 60000}
+                }))
+
+                 app.get('/',authorizationToken,  (req, res) => {
+                       if(req.session.views){
+                        req.session.views++;
+                        res.send(`Number of views: ${req.session.views}`);
+                       }else{
+                        req.session.views = 1;
+                        res.send('Welcome to the website');
+                       }
+                 })
+                 app.listen(port, () => console.log(`Example app listening on port ${port6}`))
+
+
+
+
+// Q.8 how do you create a RESTful API using Express ?
+
+     // A RESTful API (Representational state transfer API) is a way for different software applications to communicate with each other over the internet using a set of rules.
+                const express = require('express')
+                const app8= express()
+                const port8 = 3006
+                const bodyParser = require('body-parser');
+
+                app8.use(express.json());
+
+                const todos = []; 
+
+                app8.post('/addTodo', (req,res) => {
+                      const todo = req.body;
+                      todos.push(todo);
+                      res.status(201).json(todo);
+
+                })
+
+                app8.get('/', (req,res) => {
+                  res.json(todos);
+                })
+
+
+                app8.get('/:id', (req, res) => {
+                  const todo = todos.find(t => t.id === parseInt(req.params.id));
+                  if(!todo) return res.status(404).json({message: 'To-do not found'});
+                  res.json(todo);
+                })
+
+                 app.listen(port8, () => console.log(`Example app listening on port ${port8}`))
+
+
+
+// Q.9 How do you connect an Express application to database (e.g. MongoDB) ? 
+
+        const express = require('express')
+        const app10 = express()
+        const port10 = 3010
+        const mongoose = require('mongoose');
+
+        mongoose.connect('mongodburl here ')
+        .then(() => console.log('Atlas conncted').catch((err) => {
+           console.log("Something went wrong")
+        }));
+
+
+        
+                 app.listen(port10, () => console.log(`Example app listening on port ${port10}`))
+
+
