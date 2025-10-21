@@ -414,12 +414,226 @@
 
 
 
+// ######################### NODE JS ######################################
 
 
 
 
 
+  // create server on Node js --> 
 
+
+  // const http = require('http');
+  // const port = 3000; 
+
+  // const server = http.createServer((req, res) => {
+  //     res.writeHead(200, {'Content-Type':'text/plain'});
+  //     res.end();
+  // })
+
+  // server.listen(port, () => {
+  //   console.log(`Server listening on port ${port}`);
+  // })
+
+
+
+  // create server on Express Js
+
+  const express = require('express');
+  const app = express();
+  const port = 3000;
+
+
+  app.get('/', (req, res) => {
+    res.send("Hello World")
+  })
+
+
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+  })
+
+
+
+
+
+ // Q.1 Explain Asynchronous and Non-Blocking programming
+      // ->  Asynchronous programming allows your code to start a task and move on to the next one without waiting for the previous task to finish.
+      // -> Non-blocking programming refers to the way Node.js handles tasks without stopping(or blocking) the execution of other tasks.
+
+      // Asynchronous refers to the timing of tasks-tasks run independently and notify when they're done.
+      // Non-blocking refers to the behavior of the code- ensuring that no task waits or holds up the system.
+
+
+
+//Q.2 What is the Event Loop in Node.js ?
+   // -> The Event Loop in Node.js is a mechanism that handles asynchronuous operations. it allows Node.js to perform non-blocking
+   // input output operations, even though javascript is single-threaded. 
+   
+   
+
+
+//Q.3 What is Middleware in Express.js ?
+    // -> Middleware in Express.js is a function that has access to the request object(req), te response object(res), and the next middleware function in the application's request-response cycle.
+    // Middleware - 1.Logging, 2.Data Parsing, 3.Authentication
+    // they can be - Checks if the request is valid 
+    //             - logs the request details
+    //             - Parses incoming data   
+
+
+//Q.4 How does Node.js handle child threads ?
+    // -> Node.js handles child threads by using worker threads for parallel processing and child processes for creating independent process.
+    // The event loop and non-blocking i/o handle most asynchronous tasks, ensuring that Node.js remains efficient and fast.
+
+
+
+// Q.5 What are Streams in Node.js ?
+    // -> In Node.js streams are a way to handle reading or writing data continuously, piece by piece, rather than all at once.
+    // they are particularly useful for dealing with large amounts of data or data that is being received over time, like files, network request, or any process that requires data to be proccessed gradually.
+    
+      // types of streams ->
+
+             // 1.Readable Streams - used to read data. example include reading files from the file system or receiving data from an HTTP request.
+             // 2.Writable streams - Used to write data, ex- includes writing data to a file or sending a response to an HTTP request
+             //3.Duplex Streams - Both readable and writable streams. they can read and write data independently
+             //4/Transform Streams - A Special type of duplex stream that can modify or transform the data it is being read or written.
+
+
+
+// Q.6 What is Callback hell, and how can we fix it ?
+     //-> Callback hell refers to a situation in programming, especially in javascript, where multiple nested challbacks (functions executed after a task is completed) make the code difficult to read, understand, and maintain.    
+
+        // ex -> 
+                doSomething(function(result){
+                  doSomethingElse(result, function(result2) {
+                    doAnotherThing(result2, function(result3){
+                      dofinalThing(result3, function(result4) {
+                          console.log('All done ! and result :', result4);
+                      })
+                    })
+                   
+                  });
+                });
+
+
+        // this type of calling function is very wiered thing it doesent look great or efficeient its looking messed up all  
+        // for this problem we have a solution like using 
+         
+           // 1. Promises ->
+                doSomething()
+                      .then(result1 => doSomethingElse(result1))
+                      .then(result2 => doAnotherThing(result2))
+                      .then(result3 => dofinalThing(result3))
+                      .then(result4 => console.log('All done !'))
+                      .catch(error => console.error('Error;', error));
+
+        // Promises help to flatten the nested callbacks and make the code more readable.    
+        
+            // 2. Async / Await 
+                      async function processTasks() {
+                        try {
+                          const result1 = await doSomething();
+                          const result2 = await doSomethingElse(result1);
+                          const result3 = await doAnotherThing(result2);
+                          const result4 = await foFinalThing(result3);
+                          console.log('All done !');
+
+
+                        } catch(error) {
+                          console.log('Error:', error);
+                        }
+                      }
+
+                      processTasks();
+
+
+                // Async/await is a more modern approach that makes asynchronous code look like synchronous code.      
+                
+
+            // 3. Modularize the code - 
+                       function handleResult1(result1) {
+                        doSomethingElse(result1, handleResult2);
+                       }
+
+                       function handleResult2(result2){
+                        doAnotherThing(result2, handleResult2);
+                       }
+                       function handleResult4(result4) {
+                        console.log('All done!');
+                       }
+
+                       doSomething(handleResult1);
+
+               // Breaking the code into smaller, modular functions can make it more organized and reduce the nesting.        
+
+
+
+
+    
+// Q.7 How do Promises improve callback handling ?
+      // -> Promises allow you to chain asynchronous operations using .then(), making the code more linear and readable               
+                doSomething()
+                      .then(result1 => doSomethingElse(result1))
+                      .then(result2 => doAnotherThing(result2))
+                      .then(result3 => dofinalThing(result3))
+                      .then(result4 => console.log('All done !'))
+                      .catch(error => console.error('Error;', error));
+   
+         // We can achieve 1.Readability, 2.Error Handling, 3.Flexibility                 
+
+
+
+// Q.8 What is the purpose of package.json()
+      // -> The package.json file servers as the central configuration file that defines important information about the project.
+      // imp info like - 1.project Metadata , 2. Version Control
+      //                 3. Dependencies      4. PD Management
+      //                 5. Scripts           6.Project Configuration       
+      
+      
+
+
+// Q.9 What is the difference between process.nextTick() and setImmediate() ?
+      // -> process.nextTick()
+      // - Use process.nextTick() when you need to run code immediatly after the current operation. with a higher priority that i/o tasks.   
+      // 1.Runs after the current code finishes but before the next event loop cycle start.
+      // 2.Always runs before setImmediate() if called at the same time.
+      // 3.For tasks that need to run immediately after the current operation finishes.
+      //4. Higher priority, runs sooner than setlmmediate().
+      console.log("Start");
+       
+      process.nextTick(() => {
+        console.log("NextTick has been called !");
+      })
+
+      setImmediate(() => {
+        console.log("Set Immediate has been called")
+      });
+
+      console.log("End")
+
+      // -> setImmediate()
+      // - Use setImmediate() when you want to defer the execution of code untill the current I/O operations are complete and u can wait for the next event loop cycle.
+      //1. Runs in the next cycle of the event loop, after I/O operations are completed.
+      //2. Runs after process nextTick() even if called at the same time.
+      //3. For Tasks that can wait until the event loop cycle is free to execute
+      //4. Lower priority, runs later than process.nextTick().
+
+
+
+
+
+// Q.10 How can you handle erros in Node.js ?
+     // -> Error handling in Node.js is important to ensure that your application runs smoothly and can recover from unexpected issues.
+     // Multiple ways to handle errors ->
+         // 1.Try-Catch Block
+         //2. Asynchronous Callbacks
+         //3. Promises 
+         //4. Global Error Handling 
+
+         // Use try-catch with async/await
+         // Always handle promise rejections
+         // Avoid using process.exit() in error handlers
+         // Use Error Objects.
 
 
 
