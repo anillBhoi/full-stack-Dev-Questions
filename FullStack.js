@@ -939,3 +939,137 @@
                  app.listen(port10, () => console.log(`Example app listening on port ${port10}`))
 
 
+
+
+
+
+ 
+
+
+
+ // ###############################  MongoDB ##################################################################
+ 
+ 
+ // Q.1 What are the main differences between MongoDb and relational databases ?
+
+     // Relational Database - Data is split into tables with strict relationships, These relationships must be managed carefully, and changes to the structure can require siginificant updates.
+
+     // MongoDB  Everything is stored together in one documenet, making it flexible and easy to work with. New fields can be easily without needing to change the entire databse structure.
+
+
+             // Differance - 
+
+              // 1.Schema
+             //  MongoDb - No fixed structure, fields can vary by document
+             // Reltional Db - Fixed structure, all records must follow the same format 
+
+
+             // 2. Data Relationships - 
+                // Md - Can Store related data together in one document
+                // Rd - Uses seperet tables and foreign keys to connect data
+
+
+                //3.Transactions - 
+                     // Md - Supports basic transsactions but not as strong as relational databses
+                     // RD - Strong support for transactions ensuring data reliability
+
+
+                //4. Best for - 
+                     // Md - Applications with varying data, real-time analytics and big data
+                     // RD - Applications needing complex databse and structured data.
+
+
+             
+             
+
+
+ // Q.2 What is the difference between a document and a collection in MongoDb ?
+ 
+        // Document - 
+        // {
+        //   "name":"anil", 
+        //   "age" :20, 
+        //   "city": "Solapur"
+        // }
+
+
+         // Document - A Single entry in a MongoDb Collection, represents in BSON(Binary JSON) format.It consist of field-value pairs, where fields are strings, and values can be various types.
+         
+         // Collection - It's the grouping of documents. it acts as a container for documents, similar to a table in a relational databse.
+
+
+
+
+// Q.3What is a replica set, and how does it work?
+             //-> A replica set is a group of mongodb servers that work together to ensure data redundancy and high availability. it consists of one primary node and one or more secondary nodes that replicate the primary node's data
+
+
+
+// Q.4 How does MongoDb handle data conistency ? 
+      //1.Eventual Conistency - After a write operation, the data may not be immediately consistent accross all nodes, but it will become consistent over time.  
+      //2.Write Consistency - write concerns determine the level of acknowledgement required from the database after a write operation  
+      //3.Read Consistency - Allows to specify the level of consistency required for read operations.        
+      //4. Replica Sets  A primary node handles write operations, while secondary nodes replicate the data 
+      //5.Transactions - Support multi-document transactionsm meaning a group of operations can be executed in a way that ensures either all or none ot them are applied, maintaining consistency 
+           
+
+
+
+//Q.5 What are indexes in MongoDb, and why  they are important ?
+       //->  They work by storing a small portion of the data in way that makes it quicker to search through. Indexes are similar to the index at the front of a book, which allows you to quickly locate a topic without having to read every page.
+             // 1. Faster Query performance, 2.Efficient Sorting , 3. Improved Filtering     
+
+
+
+// Q.6 Explain the concept of aggregation in MongoDb
+      // -> It's like taking the data stored in the database, performing calculations or manipulations on it, 
+           // and then producing a meaningful output 
+           
+           
+           // Basically Aggregation operation allow you to transform and analyze data in a mongodb collection
+
+
+
+
+// Q.7 How does sharding work in MongoDb ?
+     //  A Shard is essentially a piece of your database       
+
+
+     // Sharding in MongoDb is a method used to ditribute data across multiple servers, or "shards", to ensure that the database can handle large datasets and high traffic.
+
+
+
+// Q.8 What are the different types of queries you can perform in MongoDb ?
+
+    // -> 
+
+
+
+
+// Q.9 What is the role of the ObjectId in MongoDb Documents ?
+    // -> A 4-byte timestamp represents the creation time.
+    //    A 5-byte random value (unique to the machine and process.)
+    //    A 3-byte incrementing counter (initialized to a random value).
+    
+    
+
+
+ // Q.10 how do you handle transaction in MongoDb ?
+     // -> 1.Start a session -  const session = client.startSession();
+     // 2. Start  a Transaction - session.startTransaction();
+     // 3.perform Operations - 
+           try {
+            await collection1.insertOne({
+              // logic 
+              session
+            });
+           }catch (error) {
+            // logic
+           }
+
+
+     // 4. Commit the transaction - await session.commitTransaction();    
+     //5.End the session - session.endSession();  
+
+
+
